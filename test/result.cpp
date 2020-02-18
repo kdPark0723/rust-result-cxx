@@ -13,7 +13,7 @@ rust::Result<int, std::string> div_test(int a, int b) {
     return rust::Ok<int>{a / b};
 }
 
-void assert(bool pass) {
+void check(bool pass) {
     if (pass)
         std::cout << "Is True.\n";
     else
@@ -23,9 +23,9 @@ void assert(bool pass) {
 int main() {
     auto result = div_test(10, 2);
 
-    assert(result.is_ok());
-    assert(result.contains(5));
-    assert(result.contains_err("Cant divided zero."));
+    check(result.is_ok());
+    check(result.contains(5));
+    check(result.contains_err("Cant divided zero."));
 //
 //    result.ok().
 
