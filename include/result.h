@@ -8,7 +8,6 @@
 #include <optional>
 #include <functional>
 
-#include "result_value.h"
 #include "ok.h"
 #include "err.h"
 
