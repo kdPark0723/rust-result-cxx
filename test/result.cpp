@@ -26,11 +26,11 @@ int main() {
     check(result.is_ok());
     check(result.contains(5));
     check(result.contains_err("Cant divided zero."));
-//
-//    result.ok().
+    check(result.ok().has_value());
 
-    std::cout << div_test(10, 2).unwarp() << "\n";
+    std::cout << result.as_ref().unwrap() << "\n";
 
-    std::cout << div_test(10, 0).unwarp() << "\n";
+    std::cout << div_test(10, 2).unwrap() << "\n";
+    std::cout << div_test(10, 0).unwrap() << "\n";
     return 0;
 }

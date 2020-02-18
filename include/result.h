@@ -5,8 +5,8 @@
 #ifndef RUST_RESULT_RESULT_H
 #define RUST_RESULT_RESULT_H
 
-#include <new>
 #include <optional>
+#include <functional>
 
 #include "result_value.h"
 #include "ok.h"
@@ -18,6 +18,9 @@ template <typename T, typename E>
 class Result {
     using _Ok = Ok<T>;
     using _Err = Err<E>;
+
+    using _Ok_Ref = Ok<T*>;
+    using _Err_Ref = Err<E*>;
 public:
     inline Result(const _Ok &ok) : ok_value{ok}, err_value{} {}
     inline Result(const _Err &err) : ok_value{}, err_value{err} {}
@@ -26,18 +29,42 @@ public:
     inline bool contains(const T &x) const noexcept {
         if (is_err())
             return false;
-        return (*ok_value).value == x;
+        return unwrap() == x;
     }
 
     inline bool contains_err(const E &e) const noexcept {
         if (is_ok())
             return false;
-        return (*err_value).value == e;
+        return unwrap_err() == e;
     }
 
-    inline T unwarp() const {
+    inline Result<T*, E*> as_ref() noexcept {
+        if (!is_ok())
+            return _Err_Ref{const_cast<E*>(&(*err_value).value)};
+        return _Ok_Ref{const_cast<T*>(&(*ok_value).value)};
+    }
+
+    inline T unwrap() const {
         if (!is_ok())
             throw (*err_value).value;
+        return (*ok_value).value;
+    }
+
+    inline E unwrap_err() const {
+        if (!is_err())
+            throw (*ok_value).value;
+        return (*err_value).value;
+    }
+
+    inline T unwrap_or(const T &optb) {
+        if (!is_ok())
+            throw optb;
+        return (*ok_value).value;
+    }
+
+    inline T unwrap_or_else(const std::function<T(const E&)> &op) {
+        if (!is_ok())
+            throw op((*err_value).value);
         return (*ok_value).value;
     }
 
@@ -57,7 +84,6 @@ public:
     }
 
 private:
-
     bool success;
 
     std::optional<_Ok> ok_value;
