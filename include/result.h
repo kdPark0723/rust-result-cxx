@@ -2,8 +2,8 @@
 // Created by siyualpark on 20. 2. 18..
 //
 
-#ifndef RUST_RESULT_RESULT_H
-#define RUST_RESULT_RESULT_H
+#ifndef RUSTY_RESULT_RESULT_H
+#define RUSTY_RESULT_RESULT_H
 
 #include <optional>
 #include <functional>
@@ -11,18 +11,21 @@
 #include "ok.h"
 #include "err.h"
 
-namespace rust {
+namespace rusty {
 
-template <typename T, typename E>
+template<typename T, typename E>
 class Result {
+    using _Result = Result<T, E>;
+
     using _Ok = Ok<T>;
     using _Err = Err<E>;
 
-    using _Ok_Ref = Ok<T*>;
-    using _Err_Ref = Err<E*>;
+    using _Ok_Ref = Ok<T *>;
+    using _Err_Ref = Err<E *>;
 
 public:
     inline Result(const _Ok &ok) : ok_value{ok}, err_value{} {}
+
     inline Result(const _Err &err) : ok_value{}, err_value{err} {}
 
     inline bool contains(const T &x) const noexcept {
@@ -37,31 +40,47 @@ public:
         return unwrap_err() == e;
     }
 
-    inline Result<T*, E*> as_ref() noexcept {
+    inline Result<T *, E *> as_ref() noexcept {
         if (!is_ok())
-            return _Err_Ref{const_cast<E*>(&(*err_value).value)};
-        return _Ok_Ref{const_cast<T*>(&(*ok_value).value)};
+            return _Err_Ref{const_cast<E *>(&(*err_value).value)};
+        return _Ok_Ref{const_cast<T *>(&(*ok_value).value)};
     }
 
-    inline T unwrap() const {
+    inline T &unwrap() {
+        return const_cast<T &>(const_cast<const _Result *>(this)->unwrap());
+    }
+
+    inline const T &unwrap() const {
         if (!is_ok())
             throw (*err_value).value;
         return (*ok_value).value;
     }
 
-    inline E unwrap_err() const {
+    inline E &unwrap_err() {
+        return const_cast<E &>(const_cast<const _Result *>(this)->unwrap_err());
+    }
+
+    inline const E &unwrap_err() const {
         if (!is_err())
             throw (*ok_value).value;
         return (*err_value).value;
     }
 
-    inline T unwrap_or(const T &optb) {
+    inline T &unwrap_or(const T &optb) {
+        return const_cast<T &>(const_cast<const _Result *>(this)->unwrap_or(optb));
+    }
+
+    inline const T &unwrap_or(const T &optb) const {
         if (!is_ok())
             throw optb;
         return (*ok_value).value;
     }
 
-    inline T unwrap_or_else(const std::function<T(const E&)> &op) {
+    inline T &unwrap_or_else(const std::function<T(const E &)> &op) {
+        return const_cast<T &>(const_cast<const _Result *>(this)->unwrap_or_else(op));
+    }
+
+    inline const T &unwrap_or_else(const std::function<T(const E &)> &op) const {
         if (!is_ok())
             throw op((*err_value).value);
         return (*ok_value).value;
@@ -70,6 +89,7 @@ public:
     inline bool is_ok() const noexcept {
         return ok_value.has_value();
     }
+
     inline bool is_err() const noexcept {
         return err_value.has_value();
     }
@@ -89,4 +109,4 @@ private:
 
 }
 
-#endif //RUST_RESULT_RESULT_H
+#endif //RUSTY_RESULT_RESULT_H

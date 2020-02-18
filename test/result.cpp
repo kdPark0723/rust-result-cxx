@@ -6,11 +6,13 @@
 #include <stdexcept>
 #include "../include/result.h"
 
-rust::Result<int, std::exception> div_optional(int a, int b) {
-    if (b == 0)
-        return rust::Err<std::exception>{std::runtime_error{"Cant divide by zero."}};
+using namespace rusty;
 
-    return rust::Ok<int>{a / b};
+Result<int, std::exception> div_optional(int a, int b) {
+    if (b == 0)
+        return Err<std::exception>{std::runtime_error{"Cant divide by zero."}};
+
+    return Ok<int>{a / b};
 }
 
 void check(bool pass) {

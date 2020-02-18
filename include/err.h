@@ -2,17 +2,16 @@
 // Created by siyualpark on 20. 2. 18..
 //
 
-#ifndef RUST_RESULT_ERR_H
-#define RUST_RESULT_ERR_H
+#ifndef RUSTY_RESULT_ERR_H
+#define RUSTY_RESULT_ERR_H
 
-#include "result_value.h"
+namespace rusty {
 
-namespace rust {
+template<typename T>
+struct Err {
+    constexpr Err(const T value) : value{value} {}
 
-template <typename T>
-class Err : public ResultVale<T> {
-public:
-    constexpr Err(const T value) : ResultVale<T>{value} {}
+    const T value;
 };
 
 }

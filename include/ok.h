@@ -2,19 +2,18 @@
 // Created by siyualpark on 20. 2. 18..
 //
 
-#ifndef RUST_RESULT_OK_H
-#define RUST_RESULT_OK_H
+#ifndef RUSTY_RESULT_OK_H
+#define RUSTY_RESULT_OK_H
 
-#include "result_value.h"
+namespace rusty {
 
-namespace rust {
+template<typename T>
+struct Ok {
+    constexpr Ok(const T value) : value{value} {}
 
-template <typename T>
-class Ok : public ResultVale<T> {
-public:
-    constexpr Ok(const T value) : ResultVale<T>{value} {}
+    const T value;
 };
 
 }
 
-#endif //RUST_RESULT_OK_H
+#endif //RUSTY_RESULT_OK_H

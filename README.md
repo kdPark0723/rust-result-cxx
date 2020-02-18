@@ -1,4 +1,4 @@
-# Result
+# Rusty Result
 
 C++ implement Rust Standard library Result by using template
 
@@ -11,11 +11,13 @@ C++ implement Rust Standard library Result by using template
 #include <stdexcept>
 #include "../include/result.h"
 
-rust::Result<int, std::exception> div_optional(int a, int b) {
-    if (b == 0)
-        return rust::Err<std::exception>{std::runtime_error{"Cant divide by zero."}};
+using namespace rusty;
 
-    return rust::Ok<int>{a / b};
+Result<int, std::exception> div_optional(int a, int b) {
+    if (b == 0)
+        return Err<std::exception>{std::runtime_error{"Cant divide by zero."}};
+
+    return Ok<int>{a / b};
 }
 
 void check(bool pass) {
@@ -38,9 +40,42 @@ int main() {
 
     std::cout << result.as_ref().unwrap() << "\n";
     std::cout << result.unwrap() << "\n";
-    std::cout << error_result.unwrap() << "\n"; // throw error
+    std::cout << error_result.unwrap() << "\n";  // throw error
 
     return 0;
 }
 ```
 
+    
+
+## API
+```c++
+template <typename T, typename E>
+class rusty::Rust {
+    Result(const Ok<T> &ok);
+    Result(const Err<E> &err);
+    
+    bool contains(const T &x) const noexcept;
+    bool contains_err(const E &e) const noexcept;
+
+    Result<T*, E*> as_ref() noexcept;
+              
+    T& unwrap();
+    const T& unwrap() const;
+              
+    E& unwrap_err();
+    const E& unwrap_err() const;
+              
+    T& unwrap_or(const T &optb);
+    const T& unwrap_or(const T &optb) const;
+              
+    T& unwrap_or_else(const std::function<T(const E&)> &op);
+    const T& unwrap_or_else(const std::function<T(const E&)> &op) const;
+              
+    bool is_ok() const noexcept
+    bool is_err() const noexcept
+              
+    std::optional<_Ok> ok() const noexcept;
+    std::optional<_Err> err() const noexcept;
+};
+```
