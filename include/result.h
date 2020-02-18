@@ -24,7 +24,6 @@ public:
     inline Result(const _Ok &ok) : ok_value{ok}, err_value{} {}
     inline Result(const _Err &err) : ok_value{}, err_value{err} {}
 
-public:
     inline bool contains(const T &x) const noexcept {
         if (is_err())
             return false;
