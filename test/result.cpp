@@ -22,11 +22,14 @@ void check(bool pass) {
 
 int main() {
     auto result = div_test(10, 2);
-
+    auto error_result = div_test(10, 0);
     check(result.is_ok());
     check(result.contains(5));
     check(result.contains_err("Cant divided zero."));
     check(result.ok().has_value());
+
+    check(result.unwrap_or_else([](const std::string &str) -> int { return 0; }) == 5);
+    check(error_result.unwrap_or_else([](const std::string &str) -> int { return 0; }) == 0);
 
     std::cout << result.as_ref().unwrap() << "\n";
 
