@@ -23,17 +23,23 @@ public:
     inline Result(const _Err &err) : ok_value{}, err_value{err} {}
 
 public:
-    inline bool is_ok() const noexcept {
-        return ok_value.has_value();
-    }
-    inline bool is_err() const noexcept {
-        return err_value.has_value();
+    inline bool contains(const T &x) const noexcept {
+        if (is_err())
+            return false;
+        return unwarp() == x;
     }
 
     inline T unwarp() const {
         if (!is_ok())
             throw (*err_value).value;
         return (*ok_value).value;
+    }
+
+    inline bool is_ok() const noexcept {
+        return ok_value.has_value();
+    }
+    inline bool is_err() const noexcept {
+        return err_value.has_value();
     }
 
 private:

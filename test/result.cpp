@@ -23,8 +23,8 @@ void assert(bool pass) {
 int main() {
     auto result = div_test(10, 2);
 
-//    assert(result.is_ok());
-//    assert(result.contains(5));
+    assert(result.is_ok());
+    assert(result.contains(5));
 //
 //    result.ok().
 
