@@ -48,6 +48,14 @@ public:
         return err_value.has_value();
     }
 
+    inline std::optional<_Ok> ok() const noexcept {
+        return ok_value;
+    }
+
+    inline std::optional<_Err> err() const noexcept {
+        return err_value;
+    }
+
 private:
 
     bool success;
