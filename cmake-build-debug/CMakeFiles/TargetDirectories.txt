@@ -1,3 +1,0 @@
-/mnt/d/Project/rust_result/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/mnt/d/Project/rust_result/cmake-build-debug/CMakeFiles/rust_result.dir
-/mnt/d/Project/rust_result/cmake-build-debug/CMakeFiles/edit_cache.dir

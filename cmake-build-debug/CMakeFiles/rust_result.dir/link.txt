@@ -1,2 +1,0 @@
-/usr/bin/ar qc librust_result.a  CMakeFiles/rust_result.dir/src/library.cpp.o
-/usr/bin/ranlib librust_result.a
