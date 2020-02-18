@@ -20,6 +20,7 @@ class Result {
 
     using _Ok_Ref = Ok<T*>;
     using _Err_Ref = Err<E*>;
+
 public:
     inline Result(const _Ok &ok) : ok_value{ok}, err_value{} {}
     inline Result(const _Err &err) : ok_value{}, err_value{err} {}
