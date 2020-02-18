@@ -26,7 +26,13 @@ public:
     inline bool contains(const T &x) const noexcept {
         if (is_err())
             return false;
-        return unwarp() == x;
+        return (*ok_value).value == x;
+    }
+
+    inline bool contains_err(const E &e) const noexcept {
+        if (is_ok())
+            return false;
+        return (*err_value).value == e;
     }
 
     inline T unwarp() const {

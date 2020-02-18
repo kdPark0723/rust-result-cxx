@@ -8,16 +8,16 @@
 
 rust::Result<int, std::string> div_test(int a, int b) {
     if (b == 0)
-        return rust::Err<std::string>{"Cant divide zero."};
+        return rust::Err<std::string>{"Cant divided zero."};
 
     return rust::Ok<int>{a / b};
 }
 
 void assert(bool pass) {
     if (pass)
-        std::cout << "Is Pass.\n";
+        std::cout << "Is True.\n";
     else
-        std::cout << "Is Error.\n";
+        std::cout << "Is False.\n";
 }
 
 int main() {
@@ -25,6 +25,7 @@ int main() {
 
     assert(result.is_ok());
     assert(result.contains(5));
+    assert(result.contains_err("Cant divided zero."));
 //
 //    result.ok().
 
