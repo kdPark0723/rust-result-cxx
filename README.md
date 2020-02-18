@@ -1,7 +1,12 @@
-//
-// Created by siyualpark on 20. 2. 18..
-//
+# Result
 
+C++ implement Rust Standard library Result by using template
+
+​    
+
+## Usage
+
+```c++
 #include <iostream>
 #include <stdexcept>
 #include "../include/result.h"
@@ -33,7 +38,9 @@ int main() {
 
     std::cout << result.as_ref().unwrap() << "\n";
     std::cout << result.unwrap() << "\n";
-    std::cout << error_result.unwrap() << "\n";  // throw error
+    std::cout << error_result.unwrap() << "\n"; // throw error
 
     return 0;
 }
+```
+
