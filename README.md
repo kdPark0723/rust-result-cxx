@@ -51,7 +51,7 @@ int main() {
 ## API
 ```c++
 template <typename T, typename E>
-class rusty::Rust {
+class rusty::Result {
     Result(const Ok<T> &ok);
     Result(const Err<E> &err);
     
