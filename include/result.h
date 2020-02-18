@@ -82,8 +82,6 @@ public:
     }
 
 private:
-    bool success;
-
     std::optional<_Ok> ok_value;
     std::optional<_Err> err_value;
 };
