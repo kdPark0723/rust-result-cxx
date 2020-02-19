@@ -52,8 +52,13 @@ int main() {
 ```c++
 template <typename T, typename E>
 class rusty::Result {
-    Result(const Ok<T> &ok);
-    Result(const Err<E> &err);
+    Result(const Ok<T> &ok) noexcept;
+    Result(const Err<E> &err) noexcept;
+    Result(const Result<T, E> &other) noexcept;
+    Result(Result<T, E> &&other) noexcept;
+
+    Result& operator=(const Result<T, E> &other) noexcept
+    Result& operator=(Result<T, E> &&other) noexcept
     
     bool contains(const T &x) const noexcept;
     bool contains_err(const E &e) const noexcept;

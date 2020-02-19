@@ -24,9 +24,17 @@ class Result {
     using _Err_Ref = Err<E *>;
 
 public:
-    inline Result(const _Ok &ok) : ok_value{ok}, err_value{} {}
+    inline Result(const _Ok &ok) noexcept : ok_value{ok}, err_value{} {}
 
-    inline Result(const _Err &err) : ok_value{}, err_value{err} {}
+    inline Result(const _Err &err) noexcept : ok_value{}, err_value{err} {}
+
+    inline Result(_Result &&other) noexcept : ok_value{std::move(other.ok_value)},
+                                              err_value{std::move(other.err_value)} {}
+
+    inline Result &operator=(_Result &&other) noexcept {
+        ok_value = std::move(other.ok_value);
+        err_value = std::move(other.err_value);
+    }
 
     inline bool contains(const T &x) const noexcept {
         if (is_err())
@@ -72,17 +80,27 @@ public:
 
     inline const T &unwrap_or(const T &optb) const {
         if (!is_ok())
-            throw optb;
+            return optb;
         return (*ok_value).value;
     }
 
-    inline T &unwrap_or_else(const std::function<T(const E &)> &op) {
+    inline T &unwrap_or_else(const std::function<T &(const E &)> &op) {
         return const_cast<T &>(const_cast<const _Result *>(this)->unwrap_or_else(op));
     }
 
-    inline const T &unwrap_or_else(const std::function<T(const E &)> &op) const {
+    inline const T &unwrap_or_else(const std::function<T &(const E &)> &op) const {
         if (!is_ok())
-            throw op((*err_value).value);
+            return op((*err_value).value);
+        return (*ok_value).value;
+    }
+
+    inline T &unwrap_or_else(const std::function<T &&(const E &)> &op) {
+        return const_cast<T &>(const_cast<const _Result *>(this)->unwrap_or_else(op));
+    }
+
+    inline const T &unwrap_or_else(const std::function<T &&(const E &)> &op) const {
+        if (!is_ok())
+            return op((*err_value).value);
         return (*ok_value).value;
     }
 
@@ -103,8 +121,8 @@ public:
     }
 
 private:
-    std::optional<_Ok> ok_value;
-    std::optional<_Err> err_value;
+    std::optional<_Ok> ok_value{};
+    std::optional<_Err> err_value{};
 };
 
 }
