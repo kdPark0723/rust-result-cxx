@@ -20,6 +20,8 @@ class Result {
     using _Ok = Ok<T>;
     using _Err = Err<E>;
 
+    using _Result_Ref = Result<T *, E *>;
+
     using _Ok_Ref = Ok<T *>;
     using _Err_Ref = Err<E *>;
 
@@ -48,7 +50,7 @@ public:
         return unwrap_err() == e;
     }
 
-    inline Result<T *, E *> as_ref() noexcept {
+    inline _Result_Ref as_ref() noexcept {
         if (!is_ok())
             return _Err_Ref{const_cast<E *>(&(*err_value).value)};
         return _Ok_Ref{const_cast<T *>(&(*ok_value).value)};
