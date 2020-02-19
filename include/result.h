@@ -76,17 +76,17 @@ public:
         return (*err_value).value;
     }
 
-    inline T &unwrap_or(const T &optb) {
+    inline T &unwrap_or(const T &optb) noexcept {
         return const_cast<T &>(const_cast<const _Result *>(this)->unwrap_or(optb));
     }
 
-    inline const T &unwrap_or(const T &optb) const {
+    inline const T &unwrap_or(const T &optb) const noexcept {
         if (!is_ok())
             return optb;
         return (*ok_value).value;
     }
 
-    inline T &unwrap_or_else(const std::function<T &(const E &)> &op) {
+    inline T &unwrap_or_else(const std::function<T &(const E &)> &op) noexcept {
         return const_cast<T &>(const_cast<const _Result *>(this)->unwrap_or_else(op));
     }
 
@@ -96,11 +96,7 @@ public:
         return (*ok_value).value;
     }
 
-    inline T &unwrap_or_else(const std::function<T &&(const E &)> &op) {
-        return const_cast<T &>(const_cast<const _Result *>(this)->unwrap_or_else(op));
-    }
-
-    inline const T &unwrap_or_else(const std::function<T &&(const E &)> &op) const {
+    inline T unwrap_or_else(const std::function<T(const E &)> &op) {
         if (!is_ok())
             return op((*err_value).value);
         return (*ok_value).value;

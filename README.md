@@ -71,12 +71,14 @@ class rusty::Result {
     E& unwrap_err();
     const E& unwrap_err() const;
               
-    T& unwrap_or(const T &optb);
-    const T& unwrap_or(const T &optb) const;
+    T& unwrap_or(const T &optb) noexcept;
+    const T& unwrap_or(const T &optb) const noexcept;
               
-    T& unwrap_or_else(const std::function<T(const E&)> &op);
-    const T& unwrap_or_else(const std::function<T(const E&)> &op) const;
+    T& unwrap_or_else(const std::function<T&(const E&)> &op);
+    const T& unwrap_or_else(const std::function<T&(const E&)> &op) const;
               
+    T unwrap_or_else(const std::function<T(const E&)> &op);
+       
     bool is_ok() const noexcept
     bool is_err() const noexcept
               
